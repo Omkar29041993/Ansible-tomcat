@@ -1,0 +1,8 @@
+This playbook contains tow
+1. tomcat- It will install and configure tomcat as service on node
+2. deployment- It will copy log war file form local to server at tomcat and restart tomcat
+
+Procedure to run playbook-
+1. Clone git repository on your machine
+2. change node ip address and public key as per your machine names
+3. run command ansible-playbook site.yml
