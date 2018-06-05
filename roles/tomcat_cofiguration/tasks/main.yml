@@ -1,0 +1,25 @@
+---  
+  - name: Print the ansible_os_family value
+    debug:
+      msg: '{{ ansible_os_family }}'
+  - name: add group "tomcat"
+    group: name=tomcat
+  - name: add user "tomcat"
+    user: name=tomcat group=tomcat home=/usr/share/tomcat createhome=no
+  - name: Install tomcat package
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+        - "tomcat-webapps"
+        - "tomcat-admin-webapps"
+    when: ansible_os_family == 'RedHat'
+  - name: Configure Tomcat server to run at port 8081
+    template: src=server.xml dest=/usr/share/tomcat/conf/server.xml
+  - name: Change ownership of Tomcat installation
+    file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
+  - name: Configure Tomcat users
+    template: src=tomcat-users.xml dest=/usr/share/tomcat/conf/tomcat-users.xml
+  - name: start tomcat as service
+    service: name=tomcat state=started
+    when: ansible_os_family == 'RedHat'

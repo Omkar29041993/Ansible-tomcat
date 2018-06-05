@@ -1,0 +1,10 @@
+---
+  - name: Delete previous war file
+    file:
+      path: /usr/share/tomcat/webapps/helloworld*
+      state: absent
+  - name: Copy war file to tomcat server
+    copy:
+      src: hello-world.war
+      dest:  /usr/share/tomcat/webapps/
+    notify: "restart tomcat"
